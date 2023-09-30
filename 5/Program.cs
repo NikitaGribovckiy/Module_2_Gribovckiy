@@ -13,9 +13,26 @@ namespace _5
             sensor.TemperatureChanged += thermostat.StartHeating;
             sensor.TemperatureChanged += thermostat.StopHeating;
 
-            // Моделируем изменение температуры и генерацию событий
-            sensor.CurrentTemperature = 18; // Температура слишком низкая, включаем отопление
-            sensor.CurrentTemperature = 22; // Температура нормализовалась, выключаем отопление
+            while (true)
+            {
+                Console.WriteLine("Введите текущую температуру (в градусах Цельсия) или 'exit' для выхода:");
+                string input = Console.ReadLine();
+
+                if (input.ToLower() == "exit")
+                {
+                    Console.WriteLine("Программа завершена.");
+                    break;
+                }
+
+                if (double.TryParse(input, out double temperature))
+                {
+                    sensor.CurrentTemperature = temperature;
+                }
+                else
+                {
+                    Console.WriteLine("Некорректный ввод. Пожалуйста, введите числовое значение температуры.");
+                }
+            }
         }
     }
 }

@@ -7,40 +7,97 @@ namespace _7
     {
         static void Main()
         {
-            // Создаем объект библиотеки
             Library library = new Library();
 
-            // Добавляем книги
-            library.AddBook(new Book("Книга 1", "Автор 1", 2000));
-            library.AddBook(new Book("Книга 2", "Автор 2", 1995));
-            library.AddBook(new Book("Книга 3", "Автор 1", 2010));
+            while (true)
+            {
+                Console.WriteLine("Выберите действие:");
+                Console.WriteLine("1. Добавить книгу");
+                Console.WriteLine("2. Удалить книгу");
+                Console.WriteLine("3. Найти книги по автору");
+                Console.WriteLine("4. Найти книги по году издания");
+                Console.WriteLine("5. Вывести список всех книг");
+                Console.WriteLine("6. Сортировать книги по названию");
+                Console.WriteLine("7. Сортировать книги по автору");
+                Console.WriteLine("8. Выйти из программы");
 
-            // Выводим список книг
-            library.DisplayBooks();
+                int choice;
+                while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 8)
+                {
+                    Console.WriteLine("Некорректный выбор. Пожалуйста, выберите действие от 1 до 8.");
+                }
 
-            // Ищем книги по автору и году
-            List<Book> booksByAuthor = library.FindBooksByAuthor("Автор 1");
-            List<Book> booksByYear = library.FindBooksByYear(2000);
+                switch (choice)
+                {
+                    case 1:
+                        Console.Write("Введите название книги: ");
+                        string title = Console.ReadLine();
+                        Console.Write("Введите автора книги: ");
+                        string author = Console.ReadLine();
+                        int year;
+                        while (true)
+                        {
+                            Console.Write("Введите год издания книги: ");
+                            if (int.TryParse(Console.ReadLine(), out year))
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Некорректный ввод. Пожалуйста, введите корректный год.");
+                            }
+                        }
+                        library.AddBook(new Book(title, author, year));
+                        break;
+                    case 2:
+                        Console.Write("Введите название книги для удаления: ");
+                        string bookToRemove = Console.ReadLine();
+                        library.RemoveBook(bookToRemove);
+                        break;
+                    case 3:
+                        Console.Write("Введите имя автора для поиска книг: ");
+                        string authorToFind = Console.ReadLine();
+                        List<Book> booksByAuthor = library.FindBooksByAuthor(authorToFind);
+                        Console.WriteLine($"Найденные книги по автору '{authorToFind}':");
+                        library.DisplayBooks(booksByAuthor);
+                        break;
+                    case 4:
+                        while (true)
+                        {
+                            Console.Write("Введите год издания для поиска книг: ");
+                            if (int.TryParse(Console.ReadLine(), out year))
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Некорректный ввод. Пожалуйста, введите корректный год.");
+                            }
+                        }
+                        List<Book> booksByYear = library.FindBooksByYear(year);
+                        Console.WriteLine($"Найденные книги по году издания {year}:");
+                        library.DisplayBooks(booksByYear);
+                        break;
+                    case 5:
+                        library.DisplayBooks();
+                        break;
+                    case 6:
+                        library.SortBooksByTitle();
+                        Console.WriteLine("Книги отсортированы по названию:");
+                        library.DisplayBooks();
+                        break;
+                    case 7:
+                        library.SortBooksByAuthor();
+                        Console.WriteLine("Книги отсортированы по автору:");
+                        library.DisplayBooks();
+                        break;
+                    case 8:
+                        Environment.Exit(0);
+                        break;
+                }
 
-            Console.WriteLine("\nКниги по автору 'Автор 1':");
-            library.DisplayBooks(booksByAuthor);
-
-            Console.WriteLine("\nКниги по году издания 2000:");
-            library.DisplayBooks(booksByYear);
-
-            // Сортируем книги и выводим
-            library.SortBooksByTitle();
-            Console.WriteLine("\nСортировка книг по названию:");
-            library.DisplayBooks();
-
-            library.SortBooksByAuthor();
-            Console.WriteLine("\nСортировка книг по автору:");
-            library.DisplayBooks();
-
-            // Удаляем книгу и выводим обновленный список
-            library.RemoveBook("Книга 2");
-            Console.WriteLine("\nКнига 'Книга 2' удалена.");
-            library.DisplayBooks();
+                Console.WriteLine();
+            }
         }
     }
 }
